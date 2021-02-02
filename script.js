@@ -17,6 +17,7 @@ exports.__esModule = true;
 var en1_json_1 = __importDefault(require("./en1.json"));
 var rounds = en1_json_1["default"].rounds;
 var teams = [];
+// FILL TEAMS ARRAY WITH ALL UNIQUE TEAM NAMES
 var getTeams = rounds.forEach(function (round) {
     round.matches.forEach(function (match) {
         if (teams.includes(match.team1) == false) {
@@ -28,6 +29,7 @@ var getTeams = rounds.forEach(function (round) {
     });
 });
 var sorted = [];
+// ITERATE OVER TEAMS ARRAY, GATHERING ALL RELATIVE INFORMATION FOR EACH TEAM
 var i;
 var _loop_1 = function () {
     var teamData = {};
@@ -38,9 +40,11 @@ var _loop_1 = function () {
     var draws = 0;
     var getScores = rounds.forEach(function (round) {
         round.matches.forEach(function (match) {
+            // CALCULATE GOALSSCORED & GOALS ALLOWED
             if (match.team1 == teams[i]) {
                 teamTotal += match.score.ft[0];
                 opponentTotal += match.score.ft[1];
+                // CALCULATE WINS/LOSSES/DRAWS
                 if (teamTotal > opponentTotal) {
                     wins += 1;
                 }
@@ -51,9 +55,11 @@ var _loop_1 = function () {
                     draws += 1;
                 }
             }
+            // CALCULATE GOALSSCORED & GOALS ALLOWED
             if (match.team2 == teams[i]) {
                 teamTotal += match.score.ft[1];
                 opponentTotal += match.score.ft[0];
+                // CALCULATE WINS/LOSSES/DRAWS
                 if (teamTotal > opponentTotal) {
                     wins += 1;
                 }
@@ -66,7 +72,9 @@ var _loop_1 = function () {
             }
         });
     });
+    // CALCULATE POINTS
     var points = wins * 3 + draws;
+    // ADD PROPERTIES TO TEAM OBJECT
     teamData.name = teams[i];
     teamData.points = points;
     teamData.wins = wins;
@@ -75,12 +83,14 @@ var _loop_1 = function () {
     teamData.goalsScored = teamTotal;
     teamData.goalsAllowed = opponentTotal;
     teamData.goalDifferential = teamTotal - opponentTotal;
+    // ADD TEAM OBJECT TO FUTURE SORTED ARRAY
     sorted.push(teamData);
 };
 for (i = 0; i < teams.length; i++) {
     _loop_1();
 }
 function compare(a, b) {
+    // SORT BY POINTS
     if (a.points < b.points) {
         return 1;
     }
@@ -88,6 +98,7 @@ function compare(a, b) {
         return -1;
     }
     if (a.points == b.points) {
+        // SORT BY GOALDIFFERENTIAL
         if (a.goalDifferential < b.goalDifferential) {
             return 1;
         }
@@ -95,6 +106,7 @@ function compare(a, b) {
             return -1;
         }
         if (a.goalDifferential == b.goalDifferential) {
+            // SORT BY GOALSSCORED
             if (a.goalsScored < b.goalsScored) {
                 return 1;
             }
@@ -106,6 +118,7 @@ function compare(a, b) {
     }
 }
 sorted.sort(compare);
+// ADD RANK
 var i;
 for (i = 0; i < sorted.length; i++) {
     var rank = i + 1;
