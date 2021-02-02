@@ -1,0 +1,11 @@
+{
+   "compilerOptions": {
+      "lib": ["es6", "es2016", "dom"],
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true
+   },
+   "files": [
+      "script.ts"
+   ]
+}
